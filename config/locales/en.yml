@@ -1,0 +1,40 @@
+---
+en:
+  decidim:
+    components:
+      forms:
+        name: Only Forms
+        settings:
+          global:
+            announcement: Announcement
+          step:
+            allow_multiple_answers: Allow Multiple Answers
+            announcement: Announcement
+      surveys:
+        name: Only Forms
+        settings:
+          global:
+            announcement: Announcement
+          step:
+            allow_multiple_answers: Allow Multiple Answers
+            announcement: Announcement
+      only_forms:
+        name: Only Forms
+        settings:
+          global:
+            announcement: Announcement
+          step:
+            allow_multiple_answers: Allow Multiple Answers
+            announcement: Announcement        
+    only_forms:
+      admin:
+        only_forms:
+          fields:
+            name: Name
+            nickname: Nickname
+          index:
+            title: Followers
+      only_forms:
+        index:
+          only_forms_head: Followers
+          no_followers: No Followers
