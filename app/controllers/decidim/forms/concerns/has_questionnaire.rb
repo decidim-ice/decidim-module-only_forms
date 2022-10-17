@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Decidim
-  module OnlyForms
+  module Forms
     module Concerns
       # Questionnaires can be related to any class in Decidim, in order to
       # manage the questionnaires for a given type, you should create a new
