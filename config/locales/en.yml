@@ -2,39 +2,26 @@
 en:
   decidim:
     components:
-      forms:
-        name: Only Forms
-        settings:
-          global:
-            announcement: Announcement
-          step:
-            allow_multiple_answers: Allow Multiple Answers
-            announcement: Announcement
-      surveys:
-        name: Only Forms
-        settings:
-          global:
-            announcement: Announcement
-          step:
-            allow_multiple_answers: Allow Multiple Answers
-            announcement: Announcement
       only_forms:
-        name: Only Forms
+        name: Forms
         settings:
           global:
+            clean_after_publish: Delete answers when publishing the form
+            ends_at: Answers accepted until
+            ends_at_help: Leave blank for no specific date
+            scope_id: Scope
+            scopes_enabled: Scopes enabled
+            starts_at: Answers accepted from
+            starts_at_help: Leave blank for no specific date
             announcement: Announcement
           step:
             allow_multiple_answers: Allow Multiple Answers
-            announcement: Announcement        
+            allow_answers: Allow answers
+            allow_unregistered: Allow unregistered users to answer the form
+            allow_unregistered_help: If active, no login will be required in order to answer the form. This may lead to poor or unreliable data and it will be more vulnerable to automated attacks. Use with caution!
+            announcement: Announcement
     only_forms:
       admin:
-        only_forms:
-          fields:
-            name: Name
-            nickname: Nickname
-          index:
-            title: Followers
-      only_forms:
-        index:
-          only_forms_head: Followers
-          no_followers: No Followers
+          exports:
+            survey_user_answers: Forms participant answers      
+

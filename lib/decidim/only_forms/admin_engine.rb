@@ -11,8 +11,6 @@ module Decidim
 
       routes do
         # Add admin engine routes here
-        #resources :only_forms
-        #root to: 'only_forms#index'
       end
 
       def load_seed

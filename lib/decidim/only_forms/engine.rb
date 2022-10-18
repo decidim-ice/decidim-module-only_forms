@@ -11,8 +11,6 @@ module Decidim
 
       routes do
         # Add engine routes here
-        #resources :only_forms
-        #root to: 'only_forms#index'
       end
 
       initializer "decidim_only_forms.assets" do |app|
