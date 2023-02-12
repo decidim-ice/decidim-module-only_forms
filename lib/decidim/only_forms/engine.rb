@@ -13,9 +13,7 @@ module Decidim
         # Add engine routes here
       end
 
-      initializer "decidim_only_forms.assets" do |app|
-        app.config.assets.precompile += %w[decidim_only_forms_manifest.js decidim_only_forms_manifest.css]
-      end
+
 
     end
   end
