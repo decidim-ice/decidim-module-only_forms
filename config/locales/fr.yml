@@ -1,0 +1,27 @@
+---
+fr:
+  decidim:
+    components:
+      only_forms:
+        name: Formulaire
+        settings:
+          global:
+            clean_after_publish: Supprimer les réponses après publication du formulaire
+            ends_at: Réponses acceptées jusqu'à
+            ends_at_help: Laisser vide si pas de limite de date pour recevoir des réponses
+            scope_id: Scope
+            scopes_enabled: Scopes enabled
+            starts_at: Réponses acceptées depuis
+            starts_at_help: Laisser vide si pas de limite de date pour débuter la réception des réponses
+            announcement: Annonces
+          step:
+            allow_multiple_answers: Autoriser les utilisateurs à répondre plusieurs fois
+            allow_answers: Autoriser les réponses
+            allow_unregistered: Autoriser les réponses pour les visiteurs
+            allow_unregistered_help: Si ceci est actif, les visiteurs n'auront pas besoin de compte pour répondre.
+            announcement: Annonce
+    only_forms:
+      admin:
+          exports:
+            survey_user_answers: Réponses au formulaire      
+
