@@ -1,0 +1,27 @@
+---
+pt:
+  decidim:
+    components:
+      only_forms:
+        name: Formulario
+        settings:
+          global:
+            clean_after_publish: Deletar as respostas apos publicação
+            ends_at: Respostas aceitas até
+            ends_at_help: Deixa vazia se não tem limitas para receber respostas
+            scope_id: Scope
+            scopes_enabled: Scopes enabled
+            starts_at: Responstas ativas depois do
+            starts_at_help: Deixa vazia se não tem inicio para receber respostas
+            announcement: Anuncios
+          step:
+            allow_multiple_answers: Deixar os usarios responder mais que uma vez
+            allow_answers: Autorisar respostas
+            allow_unregistered: Autorisar respostas de visitores
+            allow_unregistered_help: Se isso esta ativos, pessoas sem contas poderam responder.
+            announcement: Anuncios
+    only_forms:
+      admin:
+          exports:
+            survey_user_answers: Responsas ao formulario
+
