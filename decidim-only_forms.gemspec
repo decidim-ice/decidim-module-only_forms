@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,lib}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
 
-  s.add_dependency 'decidim-core', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-forms', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-surveys', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-templates', Decidim::OnlyForms.version
+  s.add_dependency 'decidim-core', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-forms', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-surveys', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-templates', Decidim::OnlyForms.decidim_version
 end
