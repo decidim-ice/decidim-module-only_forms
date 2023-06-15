@@ -69,6 +69,9 @@ module Decidim
 
             questionnaire.answered_by?(current_user || tokenize(session[:session_id]))
           end
+          def allow_multiple_answers?
+            return current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
+          end
 
           # Public: Returns a String or Object that will be passed to `redirect_to` after
           # answering the questionnaire. By default it redirects to the questionnaire_for.
