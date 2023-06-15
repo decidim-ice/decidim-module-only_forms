@@ -101,10 +101,6 @@ module Decidim
 
           private
 
-          def allow_multiple_answers?
-            return current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
-          end
-
           def i18n_flashes_scope
             "decidim.forms.questionnaires"
           end
