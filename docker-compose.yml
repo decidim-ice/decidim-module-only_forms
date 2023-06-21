@@ -1,12 +1,12 @@
 services:
   local_postgres:
-    image: postgres:12
+    image: postgres:14
     volumes:
       - pg-data-test:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - POSTGRES_PASSWORD=insecure-password
       - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_test
+      - POSTGRES_DB=decidim_only_forms_development_app
     ports:
       - 5432:5432
 
