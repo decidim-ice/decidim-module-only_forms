@@ -62,7 +62,7 @@ module Decidim
             current_user || allow_unregistered?
           end
 
-          # Public: return false if survey allow multiple answers
+          # Public: return false if survey allow multiple answers for module_only_forms
           # if not, return true if the current user (or session visitor) already answered the questionnaire
           def visitor_already_answered?
             return false if allow_multiple_answers?
