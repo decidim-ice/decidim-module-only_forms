@@ -29,7 +29,6 @@ module Decidim
             enforce_permission_to_answer_questionnaire
 
             @form = form(Decidim::Forms::QuestionnaireForm).from_params(params, session_token: session_token, ip_hash: ip_hash)
-
             Decidim::Forms::AnswerQuestionnaire.call(@form, current_user, questionnaire) do
               on(:ok) do
                 # i18n-tasks-use t("decidim.forms.questionnaires.answer.success")

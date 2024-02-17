@@ -14,12 +14,12 @@ Gem::Specification.new do |s|
 
   s.name = 'decidim-only_forms'
   s.summary = 'A decidim only_forms module'
-  s.description = "Component for list followers in a participatory space for Mkutano's Decidim.'"
+  s.description = "Component for create surveys with multiple answers'"
 
   s.files = Dir["{app,config,lib}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
 
-  s.add_dependency 'decidim-core', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-forms', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-surveys', Decidim::OnlyForms.version
-  s.add_dependency 'decidim-templates', Decidim::OnlyForms.version
+  s.add_dependency 'decidim-core', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-forms', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-surveys', Decidim::OnlyForms.decidim_version
+  s.add_dependency 'decidim-templates', Decidim::OnlyForms.decidim_version
 end
