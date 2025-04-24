@@ -1,14 +1,38 @@
 services:
-  local_postgres:
-    image: postgres:12
+  only_forms:
+    command: bash -c "sleep infinity"
+    image: octree/decidim-dev:0.29
+    entrypoint: ""
     volumes:
-      - pg-data-test:/var/lib/postgresql/data
+      - .:/home/decidim/module
+      - bundle:/home/decidim/app/vendor
+      - node_modules:/home/decidim/app/node_modules
     environment:
-      - POSTGRES_PASSWORD=TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
-      - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_test
+      - PORT=3000
+      - DATABASE_URL=postgresql://decidim:pleaseChangeMe@only-forms-pg:5432/decidim
+      - DATABASE_HOST=only-forms-pg
+      - DATABASE_USERNAME=decidim
+      - DATABASE_PASSWORD=pleaseChangeMe
+      - DEV_MODULE=decidim-only_forms
+      - RAILS_ENV=development
+      - DISABLED_DOCKER_COMPOSE = true # To run tests in docker
+    depends_on:
+      - only-forms-pg
     ports:
-      - 5432:5432
+      - 3000:3000
+    links:
+      - only-forms-pg
+
+  only-forms-pg:
+    image: postgres:15
+    volumes:
+      - only-forms-pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DATABASE=decidim
+      - POSTGRES_USER=decidim
+      - POSTGRES_PASSWORD=pleaseChangeMe
 
 volumes:
-  pg-data-test: {}
+  node_modules: {}
+  bundle: {}
+  only-forms-pg-data: {}

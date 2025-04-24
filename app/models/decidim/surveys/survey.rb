@@ -8,7 +8,9 @@ module Decidim
       include Decidim::Forms::HasQuestionnaire
       include Decidim::HasComponent
 
-      component_manifest_name "surveys"
+      #component_manifest_name "surveys"
+
+      delegate :title, to: :questionnaire
 
       validates :questionnaire, presence: true
 
