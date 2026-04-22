@@ -16,12 +16,12 @@ RSpec.describe Decidim::Forms::Concerns::HasQuestionnaire, type: :controller do
 
     def current_user = nil
 
-    def current_settings = @current_settings
+    attr_reader :current_settings
 
-    def questionnaire = @questionnaire
+    attr_reader :questionnaire
   end
 
-  let(:settings) { instance_double("settings", allow_multiple_answers: allow_multiple_answers) }
+  let(:settings) { instance_double("settings", allow_multiple_answers:) }
   let(:allow_multiple_answers) { true }
   let(:questionnaire) { instance_double("Decidim::Forms::Questionnaire") }
 
@@ -71,4 +71,3 @@ RSpec.describe Decidim::Forms::Concerns::HasQuestionnaire, type: :controller do
     end
   end
 end
-

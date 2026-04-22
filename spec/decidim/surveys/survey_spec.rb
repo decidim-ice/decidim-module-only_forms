@@ -3,25 +3,27 @@
 require "spec_helper"
 
 RSpec.describe Decidim::Surveys::Survey do
-  subject(:survey) { described_class.new }
-
-  let(:settings) do
-    instance_double(
-      "settings",
-      clean_after_publish?: true,
-      starts_at: starts_at,
-      ends_at: ends_at
+  subject(:survey) do
+    create(
+      :survey,
+      component:,
+      questionnaire: create(:questionnaire, questionnaire_for: component.participatory_space)
     )
   end
 
-  let(:component) { instance_double("Decidim::Component", settings: settings) }
+  let(:component) do
+    create(
+      :only_forms_component,
+      settings: {
+        clean_after_publish: true,
+        starts_at:,
+        ends_at:
+      }
+    )
+  end
 
   let(:starts_at) { nil }
   let(:ends_at) { nil }
-
-  before do
-    allow(survey).to receive(:component).and_return(component)
-  end
 
   describe "#clean_after_publish?" do
     it "reads from component settings" do
@@ -61,4 +63,3 @@ RSpec.describe Decidim::Surveys::Survey do
     end
   end
 end
-

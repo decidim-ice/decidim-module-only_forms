@@ -2,6 +2,7 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/DescribeClass
 RSpec.describe "OnlyForms component manifest" do
   it "registers only_forms component with allow_multiple_answers enabled by default" do
     manifest = Decidim.find_component_manifest("only_forms")
@@ -24,4 +25,4 @@ RSpec.describe "OnlyForms component manifest" do
     expect(export.serializer).to eq(Decidim::Forms::UserAnswersSerializer)
   end
 end
-
+# rubocop:enable RSpec/DescribeClass

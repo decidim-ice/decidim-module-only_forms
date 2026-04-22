@@ -27,13 +27,16 @@ namespace :decidim_only_forms do
     end
 
     def only_forms_npm_dependencies
-      @only_forms_npm_dependencies ||= begin
-        return [] if only_forms_path.nil? || !File.exist?(only_forms_path.join("package.json"))
+      return @only_forms_npm_dependencies if defined?(@only_forms_npm_dependencies)
 
-        package_json = JSON.parse(File.read(only_forms_path.join("package.json")))
+      @only_forms_npm_dependencies =
+        if only_forms_path.nil? || !File.exist?(only_forms_path.join("package.json"))
+          []
+        else
+          package_json = JSON.parse(File.read(only_forms_path.join("package.json")))
 
-        (package_json["dependencies"] || {}).map { |package, version| "#{package}@#{version}" }
-      end
+          (package_json["dependencies"] || {}).map { |package, version| "#{package}@#{version}" }
+        end
     end
 
     def only_forms_path
@@ -57,4 +60,3 @@ namespace :decidim_only_forms do
     end
   end
 end
-

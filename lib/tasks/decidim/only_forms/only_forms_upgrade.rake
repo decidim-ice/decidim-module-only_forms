@@ -11,4 +11,3 @@ if Rake::Task.task_defined?("decidim:upgrade")
     Rake::Task["#{name}:webpacker:install"].invoke if Rake::Task.task_defined?("#{name}:webpacker:install")
   end
 end
-

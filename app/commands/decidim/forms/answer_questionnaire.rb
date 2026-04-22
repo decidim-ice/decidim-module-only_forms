@@ -104,9 +104,8 @@ module Decidim
       end
 
       def allow_multiple_answers?
-        return current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
+        current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
       end
-
     end
   end
 end

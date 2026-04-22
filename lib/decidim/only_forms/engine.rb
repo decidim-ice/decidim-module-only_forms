@@ -19,7 +19,6 @@ module Decidim
       routes do
         # Add engine routes here
       end
-
     end
   end
 end

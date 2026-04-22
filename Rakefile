@@ -26,7 +26,7 @@ task :prepare_tests do
     system("docker compose up -d --remove-orphans") || system("docker-compose up -d --remove-orphans")
   end
   ENV["RAILS_ENV"] = "test"
-  databaseYml = {
+  database_yml = {
     "test" => {
       "adapter" => "postgresql",
       "encoding" => "unicode",
@@ -38,7 +38,7 @@ task :prepare_tests do
     }
   }
   config_file = File.expand_path("spec/decidim_dummy_app/config/database.yml", __dir__)
-  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
+  File.open(config_file, "w") { |f| YAML.dump(database_yml, f) }
   Dir.chdir("spec/decidim_dummy_app") do
     system("bundle exec rails db:migrate")
   end
@@ -49,16 +49,16 @@ task :test_app do
   Bundler.with_original_env do
     generate_decidim_app(
       "spec/decidim_dummy_app",
-        "--app_name",
-        "decidim_test",
-        "--path",
-        "../..",
-        "--skip_spring",
-        "--demo",
-        "--force_ssl",
-        "false",
-        "--locales",
-        "en,fr,es"
+      "--app_name",
+      "decidim_test",
+      "--path",
+      "../..",
+      "--skip_spring",
+      "--demo",
+      "--force_ssl",
+      "false",
+      "--locales",
+      "en,fr,es"
     )
   end
   install_module("spec/decidim_dummy_app")

@@ -2,7 +2,8 @@
 
 require "spec_helper"
 
-RSpec.describe "Private participatory process only-forms submission", type: :system do
+# rubocop:disable RSpec/DescribeClass
+RSpec.describe "Private participatory process only-forms submission" do
   let(:organization) { create(:organization, host: "#{SecureRandom.hex(4)}.lvh.me") }
   let(:participant) { create(:user, :confirmed, organization:) }
   let(:admin) { create(:user, :confirmed, :admin, organization:) }
@@ -41,7 +42,7 @@ RSpec.describe "Private participatory process only-forms submission", type: :sys
 
     color_question = create(
       :questionnaire_question,
-      questionnaire: questionnaire,
+      questionnaire:,
       position: 0,
       question_type: :single_option,
       body: { en: "what color do you prefer" },
@@ -53,7 +54,7 @@ RSpec.describe "Private participatory process only-forms submission", type: :sys
 
     attend_question = create(
       :questionnaire_question,
-      questionnaire: questionnaire,
+      questionnaire:,
       position: 1,
       question_type: :single_option,
       body: { en: "i will attend the meetup" },
@@ -77,7 +78,7 @@ RSpec.describe "Private participatory process only-forms submission", type: :sys
 
     expect(page).to have_content("Registration")
 
-    click_button("Accept only essential", match: :first) if page.has_button?("Accept only essential")
+    click_on("Accept only essential", match: :first) if page.has_button?("Accept only essential")
 
     check I18n.t("decidim.forms.questionnaires.show.tos_agreement")
 
@@ -85,7 +86,7 @@ RSpec.describe "Private participatory process only-forms submission", type: :sys
     choose "yes"
 
     accept_confirm do
-      click_button I18n.t("decidim.forms.step_navigation.show.submit")
+      click_on I18n.t("decidim.forms.step_navigation.show.submit")
     end
 
     expect(page).to have_content(/successfully answered/i)
@@ -103,4 +104,4 @@ RSpec.describe "Private participatory process only-forms submission", type: :sys
     expect(Decidim::Forms::QuestionnaireUserAnswers.for(questionnaire).count).to be >= 1
   end
 end
-
+# rubocop:enable RSpec/DescribeClass
