@@ -17,3 +17,8 @@ ENV["ENGINE_ROOT"] = File.dirname(__dir__)
 Decidim::Dev.dummy_app_path = File.expand_path("decidim_dummy_app", __dir__)
 
 require "decidim/dev/test/base_spec_helper"
+
+RSpec.configure do |config|
+  config.exclude_pattern = Array(config.exclude_pattern)
+  config.exclude_pattern << "spec/decidim_dummy_app/vendor/**/*_spec.rb"
+end
