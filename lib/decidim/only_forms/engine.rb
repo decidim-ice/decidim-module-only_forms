@@ -10,14 +10,10 @@ module Decidim
       isolate_namespace Decidim::OnlyForms
 
       initializer "decidim_only_forms.allow_test_hosts" do |app|
-        next unless app.config.respond_to?(:hosts)
+        next unless Rails.env.test?
 
         # Decidim system tests commonly use *.lvh.me subdomains.
-        app.config.hosts << /.*\.lvh\.me(:\d+)?/
-      end
-
-      routes do
-        # Add engine routes here
+        Rails.application.config.hosts << /.*\.lvh\.me(:\d+)?/
       end
     end
   end
