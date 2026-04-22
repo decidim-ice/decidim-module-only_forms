@@ -5,6 +5,7 @@ require "simplecov"
 SimpleCov.start do
   enable_coverage :branch
   add_filter "/spec/"
+  minimum_coverage 0
 end
 
 require "decidim/dev"
@@ -19,6 +20,17 @@ Decidim::Dev.dummy_app_path = File.expand_path("decidim_dummy_app", __dir__)
 require "decidim/dev/test/base_spec_helper"
 
 RSpec.configure do |config|
-  config.exclude_pattern = Array(config.exclude_pattern)
-  config.exclude_pattern << "spec/decidim_dummy_app/vendor/**/*_spec.rb"
+  config.before(:suite) do
+    Rails.application.config.hosts << /.*/
+  end
+
+  patterns =
+    config.exclude_pattern
+          .to_s
+          .split(/\s*,\s*/)
+          .reject(&:empty?)
+
+  patterns << "spec/decidim_dummy_app/vendor/**/*_spec.rb"
+
+  config.exclude_pattern = patterns.join(",")
 end

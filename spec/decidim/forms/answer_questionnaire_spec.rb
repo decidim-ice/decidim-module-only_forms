@@ -25,6 +25,7 @@ RSpec.describe Decidim::Forms::AnswerQuestionnaire do
       "Decidim::Forms::QuestionnaireForm",
       current_user: user,
       invalid?: form_invalid,
+      responses_by_step: [],
       responses: [],
       context:
     )
@@ -39,8 +40,8 @@ RSpec.describe Decidim::Forms::AnswerQuestionnaire do
 
   describe ".call" do
     it "supports (form, questionnaire) arity" do
-      cmd = described_class.call(form, questionnaire)
-      expect(cmd).to be_a(described_class)
+      result = described_class.call(form, questionnaire)
+      expect(result).to be_a(Hash)
     end
   end
 

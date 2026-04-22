@@ -106,6 +106,17 @@ module Decidim
       def allow_multiple_answers?
         current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
       end
+
+      def current_settings
+        return nil unless questionnaire.respond_to?(:questionnaire_for)
+
+        questionnaire_for = questionnaire.questionnaire_for
+
+        return questionnaire_for.current_settings if questionnaire_for.respond_to?(:current_settings)
+        return questionnaire_for.settings if questionnaire_for.respond_to?(:settings)
+
+        nil
+      end
     end
   end
 end
