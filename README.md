@@ -20,6 +20,11 @@ Component to create forms in a participatory space, sponsored by the [Mkutano Co
 
 OnlyForms will be available as a Component for a Participatory Space.
 
+## Compatibility
+
+- Decidim: **>= 0.26, < 0.30**
+- Ruby: **>= 3.2.2**
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -36,9 +41,21 @@ bundle exec rails decidim_only_forms:install:migrations
 bundle exec rails db:migrate
 ```
 
+Then in the admin panel, add the **Forms** component (manifest: `only_forms`) to your participatory space.
+
+## Configuration notes
+
+- **Private-only**: set `Allow unregistered` to **false** and use a private participatory space (private users).
+- **Multiple submissions**: in step settings, keep `Allow multiple answers` as **true** (default for this component).
+- **Admin export**: answers are exportable via the component export `survey_user_answers` (CSV/JSON/Excel).
+
 ## Testing
-```
-    bundle exec rake test_app
+
+```bash
+docker compose up -d
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake decidim:generate_external_test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rspec"
 ```
 
 ## Local development
@@ -51,6 +68,15 @@ First, you need to run an empty database with a decidim dev container which runs
 ```
 docker-compose down -v --remove-orphans
 docker-compose up -d
+```
+
+### Running tests in Docker
+
+```bash
+docker compose up -d
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake decidim:generate_external_test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rspec"
 ```
 
 Once created, you access the decidim container

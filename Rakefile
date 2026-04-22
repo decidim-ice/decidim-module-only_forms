@@ -22,8 +22,8 @@ task :prepare_tests do
   # Remove previous existing db, and recreate one.
   disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
   unless disable_docker_compose
-    system("sudo docker-compose down -v")
-    system("sudo docker-compose up -d --remove-orphans")
+    system("docker compose down -v") || system("docker-compose down -v")
+    system("docker compose up -d --remove-orphans") || system("docker-compose up -d --remove-orphans")
   end
   ENV["RAILS_ENV"] = "test"
   databaseYml = {
@@ -37,18 +37,18 @@ task :prepare_tests do
       "database" => "decidim_test"
     }
   }
-  config_file = File.expand_path("spec/dummy/config/database.yml", __dir__)
+  config_file = File.expand_path("spec/decidim_dummy_app/config/database.yml", __dir__)
   File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
-  Dir.chdir("spec/dummy") do
-     system("bundle exec rails db:migrate")
-   end
+  Dir.chdir("spec/decidim_dummy_app") do
+    system("bundle exec rails db:migrate")
+  end
 end
 
 desc "Generates a dummy app for testing"
 task :test_app do
   Bundler.with_original_env do
     generate_decidim_app(
-      "spec/dummy",
+      "spec/decidim_dummy_app",
         "--app_name",
         "decidim_test",
         "--path",
@@ -61,7 +61,7 @@ task :test_app do
         "en,fr,es"
     )
   end
-  install_module("spec/dummy")
+  install_module("spec/decidim_dummy_app")
   Rake::Task["prepare_tests"].invoke
 end
 
