@@ -15,7 +15,7 @@ en:
             starts_at_help: Leave blank for no specific date
             announcement: Announcement
           step:
-            allow_multiple_answers: Allow Multiple Answers
+            allow_multiple_answers: If answers are allowed, same user can answer multiple times
             allow_answers: Allow answers
             allow_unregistered: Allow unregistered users to answer the form
             allow_unregistered_help: If active, no login will be required in order to answer the form. This may lead to poor or unreliable data and it will be more vulnerable to automated attacks. Use with caution!

@@ -115,6 +115,11 @@ module Decidim
         return questionnaire_for.current_settings if questionnaire_for.respond_to?(:current_settings)
         return questionnaire_for.settings if questionnaire_for.respond_to?(:settings)
 
+        questionnaire_for_component = questionnaire_for.component if questionnaire_for.respond_to?(:component)
+
+        return questionnaire_for_component.current_settings if questionnaire_for_component.respond_to?(:current_settings)
+        return questionnaire_for_component.settings if questionnaire_for_component.respond_to?(:settings)
+
         nil
       end
     end
