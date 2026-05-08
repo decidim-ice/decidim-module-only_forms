@@ -16,9 +16,9 @@ end
 
 desc "Prepare for testing"
 task :prepare_tests do
-  system("bundle add doorkeeper")
-  system("bundle exec rails generate doorkeeper:install")
-  system("bundle exec rails generate doorkeeper:migration")
+  # Doorkeeper is pinned in the Gemfile; Decidim ships doorkeeper migrations in the dummy app.
+  # Do not run `bundle add doorkeeper` or vanilla doorkeeper generators here — they duplicate
+  # decidim's setup and fail when run from the engine root (no config/routes.rb).
   # Remove previous existing db, and recreate one.
   disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
   unless disable_docker_compose
@@ -78,9 +78,6 @@ task :development_app do
       "--demo"
     )
   end
-
-  system("bin/rails generate doorkeeper:install")
-  system("bin/rails generate doorkeeper:migration")
 
   install_module("development_app")
   seed_db("development_app")

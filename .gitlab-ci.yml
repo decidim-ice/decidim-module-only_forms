@@ -8,8 +8,10 @@ variables:
   POSTGRES_PASSWORD: "TEST-insecure_password"
 
 services:
-  - postgis/postgis:17-3.6-alpine
-  - redis:latest
+  - name: postgis/postgis:17-3.6-alpine
+    alias: postgres
+  - name: redis:latest
+    alias: redis
 
 .development_rules:
   rules:
@@ -36,16 +38,15 @@ ruby::rspec:
   stage: test
   artifacts:
     when: always
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/coverage.xml
+    paths:
+      - coverage/
   variables:
     DATABASE_HOST: "postgres"
     DATABASE_PORT: "5432"
     DATABASE_USERNAME: "decidim"
     DATABASE_PASSWORD: "TEST-insecure_password"
     DISABLED_DOCKER_COMPOSE: "true"
+    DISABLE_SPRING: "1"
     SIMPLECOV: 1
     CI: 1
     NODE_MAJOR: 18
