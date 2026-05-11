@@ -2,7 +2,6 @@
 
 module Decidim
   module Forms
-    # maintains compatibility with v0.26 which uses Rectify
     if defined? ::Decidim::Command
       class Command < ::Decidim::Command
       end

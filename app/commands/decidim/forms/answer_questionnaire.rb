@@ -4,15 +4,15 @@ module Decidim
   module Forms
     # This command is executed when the user answers a Questionnaire.
     class AnswerQuestionnaire < Decidim::Forms::Command
+      delegate :current_user, to: :form
       include ::Decidim::MultipleAttachmentsMethods
 
       # Initializes a AnswerQuestionnaire Command.
       #
       # form - The form from which to get the data.
       # questionnaire - The current instance of the questionnaire to be answered.
-      def initialize(form, current_user, questionnaire)
+      def initialize(form, questionnaire)
         @form = form
-        @current_user = current_user
         @questionnaire = questionnaire
       end
 
@@ -32,7 +32,7 @@ module Decidim
         end
       end
 
-      attr_reader :form, :questionnaire, :current_user
+      attr_reader :form, :questionnaire
 
       private
 
@@ -54,7 +54,7 @@ module Decidim
         Answer.transaction(requires_new: true) do
           form.responses_by_step.flatten.select(&:display_conditions_fulfilled?).each do |form_answer|
             answer = Answer.new(
-              user: @current_user,
+              user: current_user,
               questionnaire: @questionnaire,
               question: form_answer.question,
               body: form_answer.body,
@@ -104,9 +104,24 @@ module Decidim
       end
 
       def allow_multiple_answers?
-        return current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
+        current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
       end
 
+      def current_settings
+        return nil unless questionnaire.respond_to?(:questionnaire_for)
+
+        questionnaire_for = questionnaire.questionnaire_for
+
+        return questionnaire_for.current_settings if questionnaire_for.respond_to?(:current_settings)
+        return questionnaire_for.settings if questionnaire_for.respond_to?(:settings)
+
+        questionnaire_for_component = questionnaire_for.component if questionnaire_for.respond_to?(:component)
+
+        return questionnaire_for_component.current_settings if questionnaire_for_component.respond_to?(:current_settings)
+        return questionnaire_for_component.settings if questionnaire_for_component.respond_to?(:settings)
+
+        nil
+      end
     end
   end
 end

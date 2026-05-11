@@ -1,0 +1,70 @@
+stages:
+  - lint
+  - test
+
+variables:
+  POSTGRES_DB: decidim_test
+  POSTGRES_USER: decidim
+  POSTGRES_PASSWORD: "TEST-insecure_password"
+
+services:
+  - name: postgis/postgis:17-3.6-alpine
+    alias: postgres
+  - name: redis:latest
+    alias: redis
+
+.development_rules:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - if: '$CI_COMMIT_TAG'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+
+ruby::rubocop:
+  extends: .development_rules
+  image: ruby:3.2.2
+  stage: lint
+  script:
+    - bundle install -j $(nproc) --retry 3
+    - bundle exec rubocop .
+
+ruby::rspec:
+  extends: .development_rules
+  image: ruby:3.2.2
+  stage: test
+  artifacts:
+    when: always
+    paths:
+      - coverage/
+  variables:
+    DATABASE_HOST: "postgres"
+    DATABASE_PORT: "5432"
+    DATABASE_USERNAME: "decidim"
+    DATABASE_PASSWORD: "TEST-insecure_password"
+    DISABLED_DOCKER_COMPOSE: "true"
+    DISABLE_SPRING: "1"
+    SIMPLECOV: 1
+    CI: 1
+    NODE_MAJOR: 18
+  before_script:
+    # System specs need Chromium/Chrome + matching chromedriver; plain ruby:* images omit the browser,
+    # so chromedriver can exit before binding and Selenium retries until ECONNREFUSED.
+    - apt-get update -qq && apt-get install -y ca-certificates curl gnupg wget
+    - wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - apt-get install -y /tmp/google-chrome.deb || (apt-get -f install -y && apt-get install -y /tmp/google-chrome.deb)
+    - rm -f /tmp/google-chrome.deb
+    - mkdir -p /etc/apt/keyrings
+    - curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+    - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+    - apt-get update -qq && apt-get install -y -qq nodejs
+    - npm install -g yarn --force
+    - gem install bundler
+    - bundle config set path 'vendor'
+    - RAILS_ENV=development bundle install -j $(nproc) --retry 3
+    - bundle exec rake test_app
+  script:
+    - RAILS_ENV=test bundle exec rspec

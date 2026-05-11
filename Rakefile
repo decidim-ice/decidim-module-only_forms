@@ -16,17 +16,17 @@ end
 
 desc "Prepare for testing"
 task :prepare_tests do
-  system("bundle add doorkeeper")
-  system("bundle exec rails generate doorkeeper:install")
-  system("bundle exec rails generate doorkeeper:migration")
+  # Doorkeeper is pinned in the Gemfile; Decidim ships doorkeeper migrations in the dummy app.
+  # Do not run `bundle add doorkeeper` or vanilla doorkeeper generators here — they duplicate
+  # decidim's setup and fail when run from the engine root (no config/routes.rb).
   # Remove previous existing db, and recreate one.
   disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
   unless disable_docker_compose
-    system("sudo docker-compose down -v")
-    system("sudo docker-compose up -d --remove-orphans")
+    system("docker compose down -v") || system("docker-compose down -v")
+    system("docker compose up -d --remove-orphans") || system("docker-compose up -d --remove-orphans")
   end
   ENV["RAILS_ENV"] = "test"
-  databaseYml = {
+  database_yml = {
     "test" => {
       "adapter" => "postgresql",
       "encoding" => "unicode",
@@ -37,31 +37,31 @@ task :prepare_tests do
       "database" => "decidim_test"
     }
   }
-  config_file = File.expand_path("spec/dummy/config/database.yml", __dir__)
-  File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
-  Dir.chdir("spec/dummy") do
-     system("bundle exec rails db:migrate")
-   end
+  config_file = File.expand_path("spec/decidim_dummy_app/config/database.yml", __dir__)
+  File.open(config_file, "w") { |f| YAML.dump(database_yml, f) }
+  Dir.chdir("spec/decidim_dummy_app") do
+    system("bundle exec rails db:migrate")
+  end
 end
 
 desc "Generates a dummy app for testing"
 task :test_app do
   Bundler.with_original_env do
     generate_decidim_app(
-      "spec/dummy",
-        "--app_name",
-        "decidim_test",
-        "--path",
-        "../..",
-        "--skip_spring",
-        "--demo",
-        "--force_ssl",
-        "false",
-        "--locales",
-        "en,fr,es"
+      "spec/decidim_dummy_app",
+      "--app_name",
+      "decidim_test",
+      "--path",
+      "../..",
+      "--skip_spring",
+      "--demo",
+      "--force_ssl",
+      "false",
+      "--locales",
+      "en,fr,es"
     )
   end
-  install_module("spec/dummy")
+  install_module("spec/decidim_dummy_app")
   Rake::Task["prepare_tests"].invoke
 end
 
@@ -78,9 +78,6 @@ task :development_app do
       "--demo"
     )
   end
-
-  system("bin/rails generate doorkeeper:install")
-  system("bin/rails generate doorkeeper:migration")
 
   install_module("development_app")
   seed_db("development_app")

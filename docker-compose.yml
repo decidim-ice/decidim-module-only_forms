@@ -4,18 +4,19 @@ services:
     image: octree/decidim-dev:0.29
     entrypoint: ""
     volumes:
-      - .:/home/decidim/module
-      - bundle:/home/decidim/app/vendor
-      - node_modules:/home/decidim/app/node_modules
+      - .:/home/module
+      - bundle:/home/decidim/vendor
+      - node_modules:/home/decidim/node_modules
     environment:
       - PORT=3000
       - DATABASE_URL=postgresql://decidim:pleaseChangeMe@only-forms-pg:5432/decidim
       - DATABASE_HOST=only-forms-pg
+      - DATABASE_PORT=5432
       - DATABASE_USERNAME=decidim
       - DATABASE_PASSWORD=pleaseChangeMe
       - DEV_MODULE=decidim-only_forms
       - RAILS_ENV=development
-      - DISABLED_DOCKER_COMPOSE = true # To run tests in docker
+      - DISABLED_DOCKER_COMPOSE=true # allow running rake tasks inside container
     depends_on:
       - only-forms-pg
     ports:
@@ -24,7 +25,7 @@ services:
       - only-forms-pg
 
   only-forms-pg:
-    image: postgres:15
+    image: postgis/postgis:17-3.6-alpine
     volumes:
       - only-forms-pg-data:/var/lib/postgresql/data
     environment:

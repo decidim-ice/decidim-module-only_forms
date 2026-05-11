@@ -10,7 +10,7 @@ require_relative "#{base_path}lib/decidim/only_forms/version"
 
 ruby RUBY_VERSION
 
-DECIDIM_VERSION = "~> 0.29.1"
+DECIDIM_VERSION = "~> 0.29"
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-only_forms", path: base_path
@@ -32,6 +32,7 @@ group :test do
   gem "capybara", "~> 3.24"
   gem "rspec-rails", "~> 6.0"
   gem "rubocop-faker"
+  gem "simplecov", require: false
 end
 
 group :development do
@@ -39,3 +40,5 @@ group :development do
   gem "listen", "~> 3.1"
   gem "web-console", "~> 4.2"
 end
+
+gem "doorkeeper", "~> 5.9"
