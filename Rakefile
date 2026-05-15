@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "decidim/dev/common_rake"
+require "rake"
+require "rake/file_utils"
 
 def install_module(path)
   Dir.chdir(path) do
@@ -22,8 +24,8 @@ task :prepare_tests do
   # Remove previous existing db, and recreate one.
   disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
   unless disable_docker_compose
-    system("docker compose down -v") || system("docker-compose down -v")
-    system("docker compose up -d --remove-orphans") || system("docker-compose up -d --remove-orphans")
+    sh "docker compose down -v || docker-compose down -v"
+    sh "docker compose up -d --remove-orphans || docker-compose up -d --remove-orphans"
   end
   ENV["RAILS_ENV"] = "test"
   database_yml = {
@@ -34,13 +36,16 @@ task :prepare_tests do
       "port" => ENV.fetch("DATABASE_PORT", "5432").to_i,
       "username" => ENV.fetch("DATABASE_USERNAME", "decidim"),
       "password" => ENV.fetch("DATABASE_PASSWORD", "TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo"),
-      "database" => "decidim_test"
+      "database" => "decidim_test",
+      "sslmode" => ENV.fetch("DATABASE_SSLMODE", "disable")
     }
   }
   config_file = File.expand_path("spec/decidim_dummy_app/config/database.yml", __dir__)
   File.open(config_file, "w") { |f| YAML.dump(database_yml, f) }
   Dir.chdir("spec/decidim_dummy_app") do
-    system("bundle exec rails db:migrate")
+    Bundler.with_original_env do
+      sh "bundle exec rails db:migrate"
+    end
   end
 end
 

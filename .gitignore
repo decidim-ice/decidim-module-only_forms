@@ -1,4 +1,6 @@
 /.bundle/
+# bundle install --path vendor (CI / local); never commit gem trees
+/vendor/
 /.yardoc
 /_yardoc/
 /coverage/

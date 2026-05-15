@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 require "decidim/gem_manager"
+require "rake"
+require "rake/file_utils"
+
+module Decidim
+  module OnlyForms
+    # Rake `FileUtils#sh` fails the task on non-zero exit; bare `system` does not.
+    module WebpackerRakeShell
+      class << self
+        include FileUtils
+      end
+
+      def self.run!(cwd, command)
+        chdir(cwd) { sh command }
+      end
+    end
+  end
+end
 
 namespace :decidim_only_forms do
   namespace :webpacker do
@@ -48,7 +65,7 @@ namespace :decidim_only_forms do
     end
 
     def only_forms_system!(command)
-      system("cd #{rails_app_path} && #{command}") || abort("\n== Command #{command} failed ==")
+      Decidim::OnlyForms::WebpackerRakeShell.run!(rails_app_path.to_s, command)
     end
 
     def only_forms_gemspec
