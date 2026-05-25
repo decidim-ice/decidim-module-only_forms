@@ -22,4 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "decidim-forms", Decidim::OnlyForms.decidim_version
   s.add_dependency "decidim-surveys", Decidim::OnlyForms.decidim_version
   s.add_dependency "decidim-templates", Decidim::OnlyForms.decidim_version
+
+  s.add_dependency "deface", "~> 1.9"
 end
