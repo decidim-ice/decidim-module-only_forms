@@ -16,6 +16,7 @@ gem "decidim", DECIDIM_VERSION
 gem "decidim-only_forms", path: base_path
 
 gem "decidim-templates", DECIDIM_VERSION
+gem "deface", ">= 1.9"
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 6.3.1"

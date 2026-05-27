@@ -51,11 +51,13 @@ Then in the admin panel, add the **Forms** component (manifest: `only_forms`) to
 
 ## Testing
 
+GitLab CI runs `bundle exec rake test_app` then `RAILS_ENV=test bundle exec rspec` (same as below).
+
 ```bash
 docker compose up -d
 docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake decidim:generate_external_test_app"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rspec"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && RAILS_ENV=test bundle exec rspec"
 ```
 
 ## Local development
@@ -75,8 +77,8 @@ docker-compose up -d
 ```bash
 docker compose up -d
 docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake decidim:generate_external_test_app"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rspec"
+docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && RAILS_ENV=test bundle exec rspec"
 ```
 
 Once created, you access the decidim container
