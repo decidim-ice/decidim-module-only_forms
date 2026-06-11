@@ -1,23 +1,6 @@
 # frozen_string_literal: true
 
 require "decidim/gem_manager"
-require "rake"
-require "rake/file_utils"
-
-module Decidim
-  module OnlyForms
-    # Rake `FileUtils#sh` fails the task on non-zero exit; bare `system` does not.
-    module WebpackerRakeShell
-      class << self
-        include FileUtils
-      end
-
-      def self.run!(cwd, command)
-        chdir(cwd) { sh command }
-      end
-    end
-  end
-end
 
 namespace :decidim_only_forms do
   namespace :webpacker do
@@ -44,16 +27,12 @@ namespace :decidim_only_forms do
     end
 
     def only_forms_npm_dependencies
-      return @only_forms_npm_dependencies if defined?(@only_forms_npm_dependencies)
-
-      @only_forms_npm_dependencies =
-        if only_forms_path.nil? || !File.exist?(only_forms_path.join("package.json"))
-          []
-        else
-          package_json = JSON.parse(File.read(only_forms_path.join("package.json")))
-
-          (package_json["dependencies"] || {}).map { |package, version| "#{package}@#{version}" }
-        end
+      @only_forms_npm_dependencies ||= if only_forms_path.nil? || !File.exist?(only_forms_path.join("package.json"))
+                                         []
+                                       else
+                                         package_json = JSON.parse(File.read(only_forms_path.join("package.json")))
+                                         (package_json["dependencies"] || {}).map { |package, version| "#{package}@#{version}" }
+                                       end
     end
 
     def only_forms_path
@@ -65,7 +44,7 @@ namespace :decidim_only_forms do
     end
 
     def only_forms_system!(command)
-      Decidim::OnlyForms::WebpackerRakeShell.run!(rails_app_path.to_s, command)
+      system("cd #{rails_app_path} && #{command}") || abort("\n== Command #{command} failed ==")
     end
 
     def only_forms_gemspec

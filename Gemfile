@@ -10,17 +10,18 @@ require_relative "#{base_path}lib/decidim/only_forms/version"
 
 ruby RUBY_VERSION
 
-DECIDIM_VERSION = "~> 0.29"
+DECIDIM_VERSION = ">= 0.29.7"
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-only_forms", path: base_path
-
 gem "decidim-templates", DECIDIM_VERSION
-gem "deface", ">= 1.9"
 
-gem "bootsnap", "~> 1.4"
+gem "bootsnap", "~> 1.18"
 gem "puma", ">= 6.3.1"
-gem "uglifier", "~> 4.1"
+
+gem "deface",
+    git: "https://github.com/froger/deface",
+    branch: "fix/js-overrides"
 
 group :development, :test do
   gem "brakeman", "~> 6.1"
@@ -41,5 +42,3 @@ group :development do
   gem "listen", "~> 3.1"
   gem "web-console", "~> 4.2"
 end
-
-gem "doorkeeper", "~> 5.9"

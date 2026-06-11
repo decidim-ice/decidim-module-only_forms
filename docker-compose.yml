@@ -16,7 +16,7 @@ services:
       - DATABASE_PASSWORD=pleaseChangeMe
       - DEV_MODULE=decidim-only_forms
       - RAILS_ENV=development
-      - DISABLED_DOCKER_COMPOSE=true # allow running rake tasks inside container
+      - DISABLED_DOCKER_COMPOSE=true
     depends_on:
       - only-forms-pg
     ports:

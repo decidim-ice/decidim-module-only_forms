@@ -18,6 +18,10 @@ ENV["ENGINE_ROOT"] = File.dirname(__dir__)
 Decidim::Dev.dummy_app_path = File.expand_path("decidim_dummy_app", __dir__)
 
 require "decidim/dev/test/base_spec_helper"
+available_locales = ENV.fetch("DECIDIM_AVAILABLE_LOCALES", "en,ca,es").split(",").map { |locale| locale.strip.to_sym }
+I18n.available_locales = available_locales
+I18n.default_locale = ENV.fetch("DECIDIM_DEFAULT_LOCALE", "en").to_sym
+I18n.enforce_available_locales = false
 
 RSpec.configure do |config|
   config.before(:suite) do
