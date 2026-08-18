@@ -6,6 +6,7 @@ Decidim.register_component(:only_forms) do |component|
   survey_component = Decidim.find_component_manifest("surveys")
   component.attributes = survey_component.attributes.deep_dup
   component.name = "only_forms"
+  component.component_form_class_name = "Decidim::OnlyForms::Admin::ComponentForm"
 
   component.settings(:global) do |settings|
     settings.attribute :scopes_enabled, type: :boolean, default: false
@@ -14,6 +15,7 @@ Decidim.register_component(:only_forms) do |component|
     settings.attribute :ends_at, type: :time
     settings.attribute :announcement, type: :text, translated: true, editor: true
     settings.attribute :clean_after_publish, type: :boolean, default: true
+    settings.attribute :admin_email, type: :string
   end
 
   component.settings(:step) do |settings|

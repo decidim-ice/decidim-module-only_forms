@@ -36,6 +36,7 @@ RSpec.describe Decidim::Forms::AnswerQuestionnaire do
 
   before do
     allow(questionnaire).to receive(:answered_by?).and_return(false)
+    allow(questionnaire).to receive(:questionnaire_for).and_return(nil)
   end
 
   describe ".call" do
@@ -77,6 +78,20 @@ RSpec.describe Decidim::Forms::AnswerQuestionnaire do
 
       it "broadcasts ok" do
         expect { command.call }.to broadcast(:ok)
+      end
+
+      it "publishes answer_questionnaire:after" do
+        seen = nil
+        subscriber = ActiveSupport::Notifications.subscribe("decidim.forms.answer_questionnaire:after") do |_name, data|
+          seen = data
+        end
+
+        command.call
+
+        expect(seen[:resource]).to eq(questionnaire)
+        expect(seen[:extra][:session_token]).to eq("st")
+      ensure
+        ActiveSupport::Notifications.unsubscribe(subscriber)
       end
     end
 

@@ -15,6 +15,15 @@ RSpec.describe "OnlyForms component manifest" do
     expect(step_settings.attributes[:allow_multiple_answers].default).to be(true)
   end
 
+  it "registers admin_email on global settings" do
+    manifest = Decidim.find_component_manifest("only_forms")
+    global_settings = manifest.settings(:global)
+
+    expect(global_settings.attributes).to include(:admin_email)
+    expect(global_settings.attributes[:admin_email].type).to eq(:string)
+    expect(manifest.component_form_class_name).to eq("Decidim::OnlyForms::Admin::ComponentForm")
+  end
+
   it "defines survey user answers exports" do
     manifest = Decidim.find_component_manifest("only_forms")
 
