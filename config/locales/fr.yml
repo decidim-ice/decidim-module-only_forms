@@ -14,6 +14,8 @@ fr:
             starts_at: Réponses acceptées depuis
             starts_at_help: Laisser vide si pas de limite de date pour débuter la réception des réponses
             announcement: Annonces
+            admin_email: Email de notification administrateur
+            admin_email_help: Doit être un admin de l'organisation ou de l'espace. Laisser vide pour désactiver.
           step:
             allow_multiple_answers: Autoriser les utilisateurs à répondre plusieurs fois
             allow_answers: Autoriser les réponses
@@ -22,6 +24,12 @@ fr:
             announcement: Annonce
     only_forms:
       admin:
-          exports:
-            survey_user_answers: Réponses au formulaire      
+        exports:
+          survey_user_answers: Réponses au formulaire
+      admin_submission_mailer:
+        notify:
+          intro: Une nouvelle soumission a été reçue pour « %{questionnaire_title} » dans %{participatory_space}.
+          subject: Nouvelle soumission pour %{questionnaire_title}
+          submitted_by: Soumis par %{author}
+          unregistered: Participant non inscrit
 

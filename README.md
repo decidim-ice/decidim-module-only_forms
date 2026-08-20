@@ -18,7 +18,7 @@ Component to create forms in a participatory space, sponsored by the [Mkutano Co
 
 ## Usage
 
-OnlyForms will be available as a Component for a Participatory Space.
+OnlyForms will be available as a Component for a Participatory Space. You can optionally email an organization or space administrator after each submission; see [Admin notification email](#admin-notification-email).
 
 ## Compatibility
 
@@ -45,19 +45,40 @@ Then in the admin panel, add the **Forms** component (manifest: `only_forms`) to
 
 ## Configuration notes
 
+These notes are for a space administrator setting up the **Forms** component.
+
 - **Private-only**: set `Allow unregistered` to **false** and use a private participatory space (private users).
 - **Multiple submissions**: in step settings, keep `Allow multiple answers` as **true** (default for this component).
 - **Admin export**: answers are exportable via the component export `survey_user_answers` (CSV/JSON/Excel).
 
+### Admin notification email
+
+After each successful submission, the component can send **one** email with the answers (same question and answer rendering as the admin answers view, including textareas, multiple options, and matrix questions). Registered submitters are shown by name; unregistered submitters are labelled as unregistered.
+
+In the component **global** settings, set **Admin notification email** to:
+
+- an **organization administrator** of this organization, or
+- a **space administrator** of this participatory space (admin role on the process or assembly)
+
+Leave the field **blank** to disable notifications. Any other address is rejected when the component is saved (moderators, evaluators, ordinary participants, and admins of other spaces or organizations are not accepted).
+
 ## Testing
 
-GitLab CI runs `bundle exec rake test_app` then `RAILS_ENV=test bundle exec rspec` (same as below).
+GitLab CI runs `bin/ci-setup` then `unset DATABASE_URL && RAILS_ENV=test bundle exec rspec`.
+
+Local CI parity (same images as GitLab: `ruby:3.2.2` + PostGIS + Redis):
+
+```bash
+docker compose -f docker-compose.ci.yml run --rm rspec
+```
+
+Dev container:
 
 ```bash
 docker compose up -d
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake test_app"
-docker compose exec -T only_forms bash -lc "cd /home/module && RAILS_ENV=test bundle exec rspec"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && bundle install"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && bundle exec rake test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && RAILS_ENV=test bundle exec rspec"
 ```
 
 ## Local development
@@ -74,11 +95,19 @@ docker-compose up -d
 
 ### Running tests in Docker
 
+Prefer CI parity:
+
+```bash
+docker compose -f docker-compose.ci.yml run --rm rspec
+```
+
+Or the dev container (`unset DATABASE_URL` so specs hit `decidim_test`, not compose `DATABASE_URL`):
+
 ```bash
 docker compose up -d
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle install"
-docker compose exec -T only_forms bash -lc "cd /home/module && bundle exec rake test_app"
-docker compose exec -T only_forms bash -lc "cd /home/module && RAILS_ENV=test bundle exec rspec"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && bundle install"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && bundle exec rake test_app"
+docker compose exec -T only_forms bash -lc "cd /home/module && unset DATABASE_URL && RAILS_ENV=test bundle exec rspec"
 ```
 
 Once created, you access the decidim container

@@ -14,6 +14,8 @@ en:
             starts_at: Answers accepted from
             starts_at_help: Leave blank for no specific date
             announcement: Announcement
+            admin_email: Admin notification email
+            admin_email_help: Must be an organization admin or a space admin. Leave blank to disable.
           step:
             allow_multiple_answers: If answers are allowed, same user can answer multiple times
             allow_answers: Allow answers
@@ -22,6 +24,12 @@ en:
             announcement: Announcement
     only_forms:
       admin:
-          exports:
-            survey_user_answers: Forms participant answers      
+        exports:
+          survey_user_answers: Forms participant answers
+      admin_submission_mailer:
+        notify:
+          intro: A new submission was received for "%{questionnaire_title}" in %{participatory_space}.
+          subject: New submission for %{questionnaire_title}
+          submitted_by: Submitted by %{author}
+          unregistered: Unregistered participant
 

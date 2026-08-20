@@ -28,6 +28,7 @@ module Decidim
           reset_form_attachments
           broadcast(:invalid)
         else
+          publish_answered_event
           broadcast(:ok)
         end
       end
@@ -73,6 +74,7 @@ module Decidim
             end
 
             answer.save!
+            created_answer_ids << answer.id
 
             next unless form_answer.question.has_attachments?
 
@@ -105,6 +107,27 @@ module Decidim
 
       def allow_multiple_answers?
         current_settings.allow_multiple_answers if current_settings.respond_to?("allow_multiple_answers")
+      end
+
+      def publish_answered_event
+        ActiveSupport::Notifications.publish(
+          "decidim.forms.answer_questionnaire:after",
+          resource: questionnaire,
+          extra: event_extra
+        )
+      end
+
+      def event_extra
+        {
+          session_token: form.context.session_token,
+          questionnaire:,
+          event_author: current_user,
+          answer_ids: created_answer_ids
+        }
+      end
+
+      def created_answer_ids
+        @created_answer_ids ||= []
       end
 
       def current_settings
