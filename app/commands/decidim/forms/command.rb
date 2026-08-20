@@ -2,12 +2,7 @@
 
 module Decidim
   module Forms
-    if defined? ::Decidim::Command
-      class Command < ::Decidim::Command
-      end
-    else
-      class Command < ::Rectify::Command
-      end
+    class Command < ::Decidim::Command
     end
   end
 end

@@ -13,7 +13,8 @@ module Decidim
       let(:survey) { create(:survey, component:) }
       let(:questionnaire) { survey.questionnaire }
       let(:session_token) { "session-token" }
-      let(:mail) { described_class.notify("admin@example.org", questionnaire, session_token) }
+      let(:answer_ids) { questionnaire.answers.where(session_token:).pluck(:id) }
+      let(:mail) { described_class.notify("admin@example.org", questionnaire, answer_ids) }
 
       before do
         questionnaire.update!(questionnaire_for: survey, title: { en: "Registration" })
@@ -54,6 +55,24 @@ module Decidim
         before { create_mixed_only_forms_answers(questionnaire, user:, session_token:) }
 
         it_behaves_like "a native answers notification"
+      end
+
+      context "when the same session submits twice" do
+        let(:question) do
+          create(:questionnaire_question, questionnaire:, question_type: :short_answer, body: { en: "fullname" })
+        end
+        let!(:current_answer) do
+          create(:answer, questionnaire:, question:, session_token:, body: "Louis")
+          create(:answer, questionnaire:, question:, session_token:, body: "Ana")
+        end
+        let(:answer_ids) { [current_answer.id] }
+
+        it "includes only the answers from this submission" do
+          html = mail_html(mail)
+
+          expect(html).to include("Ana")
+          expect(html).not_to include("Louis")
+        end
       end
     end
   end

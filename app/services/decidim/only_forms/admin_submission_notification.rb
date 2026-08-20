@@ -9,14 +9,14 @@ module Decidim
 
       def initialize(data)
         @questionnaire = data[:resource]
-        @session_token = data.dig(:extra, :session_token)
+        @answer_ids = Array(data.dig(:extra, :answer_ids))
       end
 
       def deliver
         return unless @questionnaire.is_a?(::Decidim::Forms::Questionnaire)
         return unless notify?
 
-        AdminSubmissionMailer.notify(admin_email, @questionnaire, @session_token).deliver_later
+        AdminSubmissionMailer.notify(admin_email, @questionnaire, @answer_ids).deliver_later
       end
 
       private
@@ -50,7 +50,7 @@ module Decidim
       end
 
       def answers
-        @answers ||= collection.where(session_token: @session_token)
+        @answers ||= collection.where(id: @answer_ids)
       end
 
       def collection

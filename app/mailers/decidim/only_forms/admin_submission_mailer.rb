@@ -5,10 +5,11 @@ module Decidim
     class AdminSubmissionMailer < Decidim::ApplicationMailer
       include TranslatableAttributes
 
-      def notify(email, questionnaire, session_token)
+      def notify(email, questionnaire, answer_ids)
         @questionnaire = questionnaire
-        @answers = answers_for(questionnaire, session_token)
-        @participant = presented_participant
+        records = answers_for(questionnaire, answer_ids)
+        @author_user = records.first&.user
+        @answers = presented_answers(records)
         @organization = organization_for(questionnaire)
         deliver_notification(email)
       end
@@ -40,8 +41,11 @@ module Decidim
         questionnaire.questionnaire_for.component.organization
       end
 
-      def answers_for(questionnaire, session_token)
-        records_for(questionnaire).where(session_token:)
+      def answers_for(questionnaire, answer_ids)
+        records_for(questionnaire)
+          .where(id: answer_ids)
+          .joins(:question)
+          .order("decidim_forms_questions.position ASC")
       end
 
       def records_for(questionnaire)
@@ -50,8 +54,8 @@ module Decidim
         questionnaire.responses
       end
 
-      def presented_participant
-        Decidim::Forms::Admin::QuestionnaireParticipantPresenter.new(participant: @answers.first)
+      def presented_answers(records)
+        records.map { |answer| Decidim::Forms::Admin::QuestionnaireAnswerPresenter.new(answer:) }
       end
 
       def participatory_space
@@ -59,7 +63,7 @@ module Decidim
       end
 
       def author_label
-        user = @answers.first&.user
+        user = @author_user
         return unregistered_label if user.blank?
 
         "#{user.name} (#{user.email})"

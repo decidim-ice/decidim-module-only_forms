@@ -90,6 +90,24 @@ RSpec.describe Decidim::Forms::AnswerQuestionnaire do
 
         expect(seen[:resource]).to eq(questionnaire)
         expect(seen[:extra][:session_token]).to eq("st")
+        expect(seen[:extra][:answer_ids]).to eq([])
+      ensure
+        ActiveSupport::Notifications.unsubscribe(subscriber)
+      end
+
+      it "publishes the created answer ids" do
+        publishing_class = Class.new(command_class) do
+          define_method(:answer_questionnaire) { @created_answer_ids = [11, 22] }
+        end
+        publishing_command = publishing_class.new(form, questionnaire)
+        seen = nil
+        subscriber = ActiveSupport::Notifications.subscribe("decidim.forms.answer_questionnaire:after") do |_name, data|
+          seen = data
+        end
+
+        publishing_command.call
+
+        expect(seen[:extra][:answer_ids]).to eq([11, 22])
       ensure
         ActiveSupport::Notifications.unsubscribe(subscriber)
       end

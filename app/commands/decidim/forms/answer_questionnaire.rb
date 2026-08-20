@@ -74,6 +74,7 @@ module Decidim
             end
 
             answer.save!
+            created_answer_ids << answer.id
 
             next unless form_answer.question.has_attachments?
 
@@ -120,8 +121,13 @@ module Decidim
         {
           session_token: form.context.session_token,
           questionnaire:,
-          event_author: current_user
+          event_author: current_user,
+          answer_ids: created_answer_ids
         }
+      end
+
+      def created_answer_ids
+        @created_answer_ids ||= []
       end
 
       def current_settings

@@ -22,17 +22,19 @@ module Decidim
       let(:user) { create(:user, :confirmed, organization:) }
       let(:question) { create(:questionnaire_question, questionnaire:) }
       let(:session_token) { "session-token" }
+      let(:answer) { create(:answer, questionnaire:, question:, user:, session_token:, body: "red") }
+      let(:answer_ids) { [answer.id] }
       let(:data) do
         {
           resource: questionnaire,
-          extra: { session_token:, questionnaire:, event_author: user }
+          extra: { session_token:, questionnaire:, event_author: user, answer_ids: }
         }
       end
       let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
 
       before do
         questionnaire.update!(questionnaire_for: survey)
-        create(:answer, questionnaire:, question:, user:, session_token:, body: "red")
+        answer
         allow(AdminSubmissionMailer).to receive(:notify).and_return(mailer)
       end
 
@@ -45,9 +47,19 @@ module Decidim
           expect(AdminSubmissionMailer).to have_received(:notify).with(
             "admin@example.org",
             questionnaire,
-            session_token
+            answer_ids
           )
           expect(mailer).to have_received(:deliver_later)
+        end
+
+        context "when answer_ids are blank" do
+          let(:answer_ids) { [] }
+
+          it "does not enqueue" do
+            described_class.handle("decidim.forms.answer_questionnaire:after", data)
+
+            expect(AdminSubmissionMailer).not_to have_received(:notify)
+          end
         end
       end
 
