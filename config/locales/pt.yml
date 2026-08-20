@@ -14,6 +14,8 @@ pt:
             starts_at: Responstas ativas depois do
             starts_at_help: Deixa vazia se não tem inicio para receber respostas
             announcement: Anuncios
+            admin_email: Email de notificação do administrador
+            admin_email_help: Deve ser um admin da organização ou do espaço. Deixe vazio para desativar.
           step:
             allow_multiple_answers: Deixar os usarios responder mais que uma vez
             allow_answers: Autorisar respostas
@@ -22,6 +24,12 @@ pt:
             announcement: Anuncios
     only_forms:
       admin:
-          exports:
-            survey_user_answers: Responsas ao formulario
+        exports:
+          survey_user_answers: Responsas ao formulario
+      admin_submission_mailer:
+        notify:
+          intro: Uma nova submissão foi recebida para "%{questionnaire_title}" em %{participatory_space}.
+          subject: Nova submissão para %{questionnaire_title}
+          submitted_by: Submetido por %{author}
+          unregistered: Participante não registado
 

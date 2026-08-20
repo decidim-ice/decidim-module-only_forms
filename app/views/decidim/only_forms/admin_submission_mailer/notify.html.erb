@@ -1,0 +1,12 @@
+<p>
+  <%= t(".intro", questionnaire_title: @questionnaire_title, participatory_space: @participatory_space_title) %>
+</p>
+<p>
+  <%= t(".submitted_by", author: @author_label) %>
+</p>
+<dl>
+  <% @answers.each do |answer| %>
+    <dt><%= answer.question %></dt>
+    <dd><%= answer.body %></dd>
+  <% end %>
+</dl>

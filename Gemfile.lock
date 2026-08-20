@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    decidim-only_forms (0.1.3)
+    decidim-only_forms (0.1.4)
       decidim-core (>= 0.26, < 0.30)
       decidim-forms (>= 0.26, < 0.30)
       decidim-surveys (>= 0.26, < 0.30)
