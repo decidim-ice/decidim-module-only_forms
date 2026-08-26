@@ -4,7 +4,7 @@ module Decidim
   # This holds the decidim-meetings version.
   module OnlyForms
     def self.version
-      "0.1.4"
+      "0.1.5"
     end
 
     def self.decidim_version
