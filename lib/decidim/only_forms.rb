@@ -4,6 +4,8 @@ require "decidim/only_forms/admin"
 require "decidim/only_forms/engine"
 require "decidim/only_forms/admin_engine"
 require "decidim/only_forms/component"
+require "decidim/only_forms/overrides/only_form_settings_form"
+require "decidim/only_forms/overrides/update_only_form_settings"
 
 module Decidim
   # This namespace holds the logic of the `OnlyForms` component. This component

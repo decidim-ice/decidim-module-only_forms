@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = ["hadrien@octree.ch", "renato@octree.ch"]
   s.license = "AGPL-3.0"
   s.homepage = "https://github.com/decidim/decidim-module-only_forms"
-  s.required_ruby_version = ">= 3.2.2"
+  s.required_ruby_version = ">= 3.4.7"
 
   s.name = "decidim-only_forms"
   s.summary = "A decidim only_forms module"

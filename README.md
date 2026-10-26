@@ -22,7 +22,7 @@ OnlyForms will be available as a Component for a Participatory Space. You can op
 
 ## Compatibility
 
-- Decidim: **>= 0.26, < 0.30**
+- Decidim: **>= 0.26, < 0.33**
 - Ruby: **>= 3.2.2**
 
 ## Installation

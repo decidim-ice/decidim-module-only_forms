@@ -14,10 +14,7 @@ en:
             starts_at: Answers accepted from
             starts_at_help: Leave blank for no specific date
             announcement: Announcement
-            admin_email: Admin notification email
-            admin_email_help: Must be an organization admin or a space admin. Leave blank to disable.
           step:
-            allow_multiple_answers: If answers are allowed, same user can answer multiple times
             allow_answers: Allow answers
             allow_unregistered: Allow unregistered users to answer the form
             allow_unregistered_help: If active, no login will be required in order to answer the form. This may lead to poor or unreliable data and it will be more vulnerable to automated attacks. Use with caution!
@@ -25,7 +22,12 @@ en:
     only_forms:
       admin:
         exports:
-          survey_user_answers: Forms participant answers
+          survey_user_responses: Forms participant answers
+        form:
+          settings:
+            allow_multiple_answers: If answers are allowed, same user can answer multiple times
+            admin_email: Admin notification email
+            admin_email_help: Must be an organization admin or a space admin. Leave blank to disable.
       admin_submission_mailer:
         notify:
           intro: A new submission was received for "%{questionnaire_title}" in %{participatory_space}.

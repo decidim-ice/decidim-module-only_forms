@@ -38,7 +38,7 @@ module Decidim
       end
 
       def admin_email
-        component&.settings&.admin_email.to_s.strip
+        questionnaire_for&.admin_email.to_s.strip
       end
 
       def component

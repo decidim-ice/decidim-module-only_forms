@@ -1,8 +1,10 @@
 services:
   only_forms:
+    container_name: decidim-only_forms
     command: bash -c "sleep infinity"
-    image: octree/decidim-dev:0.29
+    image: octree/decidim-dev:0.32
     entrypoint: ""
+    working_dir: /home/module
     volumes:
       - .:/home/module
       - bundle:/home/decidim/vendor
@@ -17,6 +19,8 @@ services:
       - DEV_MODULE=decidim-only_forms
       - RAILS_ENV=development
       - DISABLED_DOCKER_COMPOSE=true
+      - DECIDIM_FORCE_SSL=false
+      - DISABLE_SPRING=1
     depends_on:
       - only-forms-pg
     ports:
@@ -25,9 +29,10 @@ services:
       - only-forms-pg
 
   only-forms-pg:
-    image: postgis/postgis:17-3.6-alpine
+    container_name: decidim-only_forms_pg
+    image: postgres:17
     volumes:
-      - only-forms-pg-data:/var/lib/postgresql/data
+      - only_forms_pg-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DATABASE=decidim
       - POSTGRES_USER=decidim
@@ -36,4 +41,4 @@ services:
 volumes:
   node_modules: {}
   bundle: {}
-  only-forms-pg-data: {}
+  only_forms_pg-data: {}

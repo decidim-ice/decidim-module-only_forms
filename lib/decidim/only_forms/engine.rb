@@ -17,6 +17,12 @@ module Decidim
           end
         end
       end
+
+      # Overrides
+      config.to_prepare do
+        Decidim::Surveys::Admin::SurveySettingsForm.include(Decidim::OnlyForms::Overrides::OnlyFormSettingsForm)
+        Decidim::Surveys::Admin::UpdateSurveySettings.include(Decidim::OnlyForms::Overrides::UpdateOnlyFormSettings)
+      end
     end
   end
 end
