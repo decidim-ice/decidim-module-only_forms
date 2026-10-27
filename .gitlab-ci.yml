@@ -29,7 +29,7 @@ services:
 
 ruby::rubocop:
   extends: .development_rules
-  image: ruby:3.2.2
+  image: ruby:3.4.7
   stage: lint
   script:
     - bundle install -j $(nproc) --retry 3
@@ -37,7 +37,7 @@ ruby::rubocop:
 
 ruby::rspec:
   extends: .development_rules
-  image: ruby:3.2.2
+  image: ruby:3.4.7
   stage: test
   artifacts:
     when: always
