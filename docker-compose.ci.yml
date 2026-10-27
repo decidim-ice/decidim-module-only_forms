@@ -23,7 +23,7 @@ services:
     image: redis:latest
 
   rspec:
-    image: ruby:3.2.2
+    image: ruby:3.4.7
     working_dir: /app
     volumes:
       - .:/app
