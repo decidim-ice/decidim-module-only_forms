@@ -52,7 +52,7 @@ ruby::rspec:
     DISABLE_SPRING: "1"
     SIMPLECOV: 1
     CI: 1
-    NODE_MAJOR: 18
+    NODE_MAJOR: 22
   before_script:
     - bash bin/ci-setup
   script:

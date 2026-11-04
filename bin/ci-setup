@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 
 git config --global --add safe.directory "$(pwd)" || true
 
-: "${NODE_MAJOR:=18}"
+: "${NODE_MAJOR:=22}"
 
 # System specs need Chromium/Chrome + matching chromedriver; plain ruby:* images omit the browser,
 # so chromedriver can exit before binding and Selenium retries until ECONNREFUSED.
