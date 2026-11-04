@@ -14,10 +14,11 @@ require_relative "#{base_path}lib/decidim/only_forms/version"
 
 gem "bootsnap", "~> 1.4"
 gem "decidim", DECIDIM_VERSION
-gem "decidim-only_forms", path: base_path
-gem "decidim-templates", DECIDIM_VERSION
 gem "decidim-conferences", DECIDIM_VERSION
 gem "decidim-initiatives", DECIDIM_VERSION
+gem "decidim-only_forms", path: base_path
+gem "decidim-templates", DECIDIM_VERSION
+
 gem "puma", ">= 6.6"
 gem "uglifier", "~> 4.2"
 gem "uri", "1.1.1"
