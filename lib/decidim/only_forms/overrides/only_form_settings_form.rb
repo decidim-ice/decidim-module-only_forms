@@ -7,7 +7,7 @@ module Decidim
         extend ActiveSupport::Concern
 
         included do
-          attribute :allow_multiple_answers, :boolean
+          attribute :allow_multiple_responses, :boolean
           attribute :admin_email, String
 
           validate :admin_email_must_be_space_admin

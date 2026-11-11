@@ -11,11 +11,11 @@ module AdminSubmissionEmailHelpers
     ]
   end
 
-  def create_mixed_only_forms_answers(questionnaire, user:, session_token:)
+  def create_mixed_only_forms_responses(questionnaire, user:, session_token:)
     long, multi, matrix = create_mixed_only_forms_questions(questionnaire)
-    create(:answer, questionnaire:, question: long, user:, session_token:, body: MIXED_TEXTAREA_BODY)
-    create_multiple_option_answer(questionnaire, multi, user, session_token)
-    create_matrix_answer(questionnaire, matrix, user, session_token)
+    create(:response, questionnaire:, question: long, user:, session_token:, body: MIXED_TEXTAREA_BODY)
+    create_multiple_option_response(questionnaire, multi, user, session_token)
+    create_matrix_response(questionnaire, matrix, user, session_token)
   end
 
   def fill_mixed_only_forms
@@ -30,21 +30,21 @@ module AdminSubmissionEmailHelpers
     find("tr", text: row_label).find("input[type=radio][value='#{option_label}']").choose
   end
 
-  def presented_submission_answers(questionnaire, session_token)
-    record = questionnaire.answers.find_by!(session_token:)
+  def presented_submission_responses(questionnaire, session_token)
+    record = questionnaire.responses.find_by!(session_token:)
     presenter = Decidim::Forms::Admin::QuestionnaireParticipantPresenter.new(participant: record)
-    presenter.answers
+    presenter.responses
   end
 
   def mail_html(mail)
     (mail.html_part || mail).body.decoded
   end
 
-  def expect_native_presented_answers(email, questionnaire, session_token)
+  def expect_native_presented_responses(email, questionnaire, session_token)
     html = compact_html(mail_html(email))
-    presented_submission_answers(questionnaire, session_token).each do |answer|
-      expect(html).to include(compact_html(answer.question))
-      expect(html).to include(compact_html(answer.body.to_s))
+    presented_submission_responses(questionnaire, session_token).each do |response|
+      expect(html).to include(compact_html(response.question))
+      expect(html).to include(compact_html(response.body.to_s))
     end
   end
 
@@ -59,7 +59,7 @@ module AdminSubmissionEmailHelpers
       :questionnaire_question,
       questionnaire:,
       position: 0,
-      question_type: :long_answer,
+      question_type: :long_response,
       body: { en: "Comments" }
     )
   end
@@ -91,22 +91,22 @@ module AdminSubmissionEmailHelpers
     labels.map { |label| { "body" => { "en" => label }, "free_text" => false } }
   end
 
-  def create_multiple_option_answer(questionnaire, question, user, session_token)
-    answer = create(:answer, questionnaire:, question:, user:, session_token:, body: nil)
+  def create_multiple_option_response(questionnaire, question, user, session_token)
+    response = create(:response, questionnaire:, question:, user:, session_token:, body: nil)
     selected_options(question, "Ruby", "Python").each do |option|
-      create(:answer_choice, answer:, answer_option: option, matrix_row: nil)
+      create(:response_choice, response:, response_option: option, matrix_row: nil)
     end
   end
 
-  def create_matrix_answer(questionnaire, question, user, session_token)
-    answer = create(:answer, questionnaire:, question:, user:, session_token:, body: nil)
+  def create_matrix_response(questionnaire, question, user, session_token)
+    response = create(:response, questionnaire:, question:, user:, session_token:, body: nil)
     rows = question.matrix_rows.order(:position)
-    options = question.answer_options
-    create(:answer_choice, answer:, answer_option: options.first, matrix_row: rows.first)
-    create(:answer_choice, answer:, answer_option: options.second, matrix_row: rows.second)
+    options = question.response_options
+    create(:response_choice, response:, response_option: options.first, matrix_row: rows.first)
+    create(:response_choice, response:, response_option: options.second, matrix_row: rows.second)
   end
 
   def selected_options(question, *labels)
-    question.answer_options.select { |option| labels.include?(option.body["en"]) }
+    question.response_options.select { |option| labels.include?(option.body["en"]) }
   end
 end

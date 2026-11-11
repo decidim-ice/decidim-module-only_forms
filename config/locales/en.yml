@@ -25,7 +25,7 @@ en:
           survey_user_responses: Forms participant answers
         form:
           settings:
-            allow_multiple_answers: If answers are allowed, same user can answer multiple times
+            allow_multiple_responses: If answers are allowed, same user can answer multiple times
             admin_email: Admin notification email
             admin_email_help: Must be an organization admin or a space admin. Leave blank to disable.
       admin_submission_mailer:

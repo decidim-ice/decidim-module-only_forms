@@ -69,7 +69,7 @@ module Decidim
 
           # Public: return true if the current user (or session visitor) can respond the questionnaire
           def visitor_already_responded?
-            return false if allow_multiple_answers?
+            return false if allow_multiple_responses?
 
             questionnaire.responded_by?(current_user || tokenize(session[:session_id]))
           end
@@ -105,8 +105,8 @@ module Decidim
 
           private
 
-          def allow_multiple_answers?
-            questionnaire.questionnaire_for.allow_multiple_answers if questionnaire.questionnaire_for.respond_to?("allow_multiple_answers")
+          def allow_multiple_responses?
+            questionnaire.questionnaire_for.allow_multiple_responses if questionnaire.questionnaire_for.respond_to?("allow_multiple_responses")
           end
 
           def allow_editing_responses?

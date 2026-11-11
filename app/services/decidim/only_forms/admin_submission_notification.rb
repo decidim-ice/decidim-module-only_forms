@@ -9,20 +9,25 @@ module Decidim
 
       def initialize(data)
         @questionnaire = data[:resource]
-        @answer_ids = Array(data.dig(:extra, :answer_ids))
+        @session_token = data.dig(:extra, :session_token)
+        @event_author = data.dig(:extra, :event_author)
       end
 
       def deliver
         return unless @questionnaire.is_a?(::Decidim::Forms::Questionnaire)
         return unless notify?
 
-        AdminSubmissionMailer.notify(admin_email, @questionnaire, @answer_ids).deliver_later
+        AdminSubmissionMailer.notify(admin_email, @questionnaire, @response_ids).deliver_later
       end
 
       private
 
+      def response_ids
+        @response_ids = collection.where(session_token: @session_token).map(&:id)
+      end
+
       def notify?
-        only_forms? && recipient_allowed? && answers.present?
+        only_forms? && recipient_allowed? && response_ids.present?
       end
 
       def only_forms?
@@ -49,12 +54,8 @@ module Decidim
         @questionnaire.questionnaire_for
       end
 
-      def answers
-        @answers ||= collection.where(id: @answer_ids)
-      end
-
       def collection
-        return @questionnaire.answers if @questionnaire.respond_to?(:answers)
+        return @questionnaire.responses if @questionnaire.respond_to?(:responses)
 
         @questionnaire.responses
       end

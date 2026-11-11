@@ -12,7 +12,11 @@ module Decidim
 
       initializer "decidim_only_forms.admin_notification_email" do
         config.to_prepare do
-          ActiveSupport::Notifications.subscribe("decidim.forms.answer_questionnaire:after") do |event_name, data|
+          ActiveSupport::Notifications.subscribe("decidim.forms.response_questionnaire:after") do |event_name, data|
+            Rails.logger.debug "\n--- EVENT PAYLOAD ---"
+            Rails.logger.debug data
+            Rails.logger.debug "---------------------"
+
             Decidim::OnlyForms::AdminSubmissionNotification.handle(event_name, data)
           end
         end

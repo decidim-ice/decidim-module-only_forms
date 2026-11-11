@@ -3,7 +3,7 @@
 require "spec_helper"
 
 # rubocop:disable RSpec/DescribeClass
-RSpec.describe "Private participatory process only-forms submission" do
+RSpec.describe "Restricted participatory process only-forms submission" do
   let(:organization) { create(:organization, host: "#{SecureRandom.hex(4)}.lvh.me") }
   let(:participant) { create(:user, :confirmed, organization:) }
   let(:admin) { create(:user, :confirmed, :admin, organization:) }
@@ -13,7 +13,7 @@ RSpec.describe "Private participatory process only-forms submission" do
       :participatory_process,
       :with_steps,
       :published,
-      :private,
+      :restricted,
       organization:,
       title: { en: "Test Process" }
     )
@@ -22,20 +22,12 @@ RSpec.describe "Private participatory process only-forms submission" do
   let(:component) do
     create(
       :only_forms_component,
-      participatory_space: process,
-      settings: { scopes_enabled: false },
-      step_settings: {
-        process.active_step.id => {
-          allow_answers: true,
-          allow_unregistered: false,
-          allow_multiple_answers: true
-        }
-      }
+      participatory_space: process
     )
   end
 
   let(:questionnaire) { create(:questionnaire, questionnaire_for: process, title: { en: "Registration" }) }
-  let!(:survey) { create(:survey, component:, questionnaire:) }
+  let!(:survey) { create(:survey, :published, :allow_responses, component:, questionnaire:) }
 
   before do
     survey.questionnaire.update!(questionnaire_for: survey)
@@ -66,15 +58,22 @@ RSpec.describe "Private participatory process only-forms submission" do
 
     [color_question, attend_question].each(&:save!)
 
-    create(:participatory_space_private_user, user: participant, privatable_to: process)
+    Decidim::ParticipatorySpace::Member.create!(
+      user: participant,
+      participatory_space: process,
+      role: { en: "member" },
+      published: true
+    )
 
     switch_to_host(organization.host)
   end
 
-  it "allows invited participant to submit and makes answers exportable" do
+  it "allows invited participant to submit and makes responses exportable" do
     login_as participant, scope: :user
 
-    visit Decidim::EngineRouter.main_proxy(component).root_path
+    url = Decidim::EngineRouter.main_proxy(component).survey_path(survey)
+
+    visit url
 
     expect(page).to have_content("Registration")
 
@@ -89,19 +88,19 @@ RSpec.describe "Private participatory process only-forms submission" do
       click_on I18n.t("decidim.forms.step_navigation.show.submit")
     end
 
-    expect(page).to have_content(/successfully answered/i)
+    expect(page).to have_content(/successfully responded/i)
 
-    answers = Decidim::Forms::Answer.where(questionnaire:)
-    expect(answers.where(user: participant).count).to be >= 2
+    responses = Decidim::Forms::Response.where(questionnaire:)
+    expect(responses.where(user: participant).count).to be >= 2
 
-    exported_answers = Decidim::Forms::QuestionnaireUserAnswers.for(questionnaire).flatten
-    exported_choice_bodies = exported_answers.flat_map { |a| a.choices.map(&:body) }.compact
+    exported_responses = Decidim::Forms::QuestionnaireUserResponses.for(questionnaire).flatten
+    exported_choice_bodies = exported_responses.flat_map { |a| a.choices.map(&:body) }.compact
 
     expect(exported_choice_bodies.join(" ")).to include("red")
     expect(exported_choice_bodies.join(" ")).to include("yes")
 
     login_as admin, scope: :user
-    expect(Decidim::Forms::QuestionnaireUserAnswers.for(questionnaire).count).to be >= 1
+    expect(Decidim::Forms::QuestionnaireUserResponses.for(questionnaire).count).to be >= 1
   end
 end
 # rubocop:enable RSpec/DescribeClass

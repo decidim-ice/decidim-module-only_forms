@@ -7,7 +7,7 @@ module AddOnlyFormsAttributes
     insert_after: "div.row.column:contains('form.check_box :allow_unregistered')",
     text: <<~ERB
       <div class="row column">
-        <%= form.check_box :allow_multiple_answers, label: t("form.settings.allow_multiple_answers", scope: "decidim.only_forms.admin"), aria: { label: :allow_multiple_answers } %>
+        <%= form.check_box :allow_multiple_responses, label: t("form.settings.allow_multiple_responses", scope: "decidim.only_forms.admin"), aria: { label: :allow_multiple_responses } %>
       </div>
       <div class="row column">
         <%= form.text_field :admin_email, label: t("form.settings.admin_email", scope: "decidim.only_forms.admin"), aria: { label: :admin_email }, help_text: t("form.settings.admin_email_help", scope: "decidim.only_forms.admin") %>

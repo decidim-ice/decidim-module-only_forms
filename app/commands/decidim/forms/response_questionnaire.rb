@@ -2,15 +2,15 @@
 
 module Decidim
   module Forms
-    # This command is executed when the user answers a Questionnaire.
+    # This command is executed when the user responses a Questionnaire.
     class ResponseQuestionnaire < Decidim::Forms::Command
       delegate :current_user, to: :form
       include ::Decidim::MultipleAttachmentsMethods
 
-      # Initializes a AnswerQuestionnaire Command.
+      # Initializes a ResponseQuestionnaire Command.
       #
       # form - The form from which to get the data.
-      # questionnaire - The current instance of the questionnaire to be answered.
+      # questionnaire - The current instance of the questionnaire to be responded.
       def initialize(form, questionnaire, allow_editing_responses: false)
         @form = form
         @questionnaire = questionnaire
@@ -124,16 +124,16 @@ module Decidim
       end
 
       def user_already_responded?
-        return false if allow_multiple_answers?
+        return false if allow_multiple_responses?
 
         questionnaire.responded_by?(current_user || form.context.session_token)
       end
 
-      def allow_multiple_answers?
-        questionnaire.questionnaire_for.allow_multiple_answers if questionnaire.questionnaire_for.respond_to?("allow_multiple_answers")
+      def allow_multiple_responses?
+        questionnaire.questionnaire_for.allow_multiple_responses if questionnaire.questionnaire_for.respond_to?("allow_multiple_responses")
       end
 
-      def publish_answered_event
+      def publish_responded_event
         ActiveSupport::Notifications.publish(
           "decidim.forms.response_questionnaire:after",
           resource: questionnaire,
@@ -146,12 +146,12 @@ module Decidim
           session_token: form.context.session_token,
           questionnaire:,
           event_author: current_user,
-          answer_ids: created_answer_ids
+          response_ids: created_response_ids
         }
       end
 
-      def created_answer_ids
-        @created_answer_ids ||= []
+      def created_response_ids
+        @created_response_ids ||= []
       end
     end
   end

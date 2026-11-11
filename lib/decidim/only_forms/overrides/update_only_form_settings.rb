@@ -20,7 +20,7 @@ module Decidim
               ends_at: form.ends_at,
               clean_after_publish: form.clean_after_publish,
               announcement: form.announcement,
-              allow_multiple_answers: form.allow_multiple_answers,
+              allow_multiple_responses: form.allow_multiple_responses,
               admin_email: form.admin_email
             )
           end

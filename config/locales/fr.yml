@@ -17,7 +17,7 @@ fr:
             admin_email: Email de notification administrateur
             admin_email_help: Doit être un admin de l'organisation ou de l'espace. Laisser vide pour désactiver.
           step:
-            allow_multiple_answers: Autoriser les utilisateurs à répondre plusieurs fois
+            allow_multiple_responses: Autoriser les utilisateurs à répondre plusieurs fois
             allow_answers: Autoriser les réponses
             allow_unregistered: Autoriser les réponses pour les visiteurs
             allow_unregistered_help: Si ceci est actif, les visiteurs n'auront pas besoin de compte pour répondre.
